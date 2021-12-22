@@ -69,28 +69,28 @@ while True:
     draw(img, props)
 
     if hands:
-        hand = hands[0]
-        pt1, pt2 = hand["lmList"][4], hand["lmList"][8]
-        length, info, img = detector.findDistance(pt1, pt2, img)
-        
-        # Hovering
-        handObj = checkPoints(props, pt2)
+        for hand in hands:
+            pt1, pt2 = hand["lmList"][4], hand["lmList"][8]
+            length, info, img = detector.findDistance(pt1, pt2, img)
+            
+            # Hovering
+            handObj = checkPoints(props, pt2)
 
-        if handObj:
-            hoverBtn(img, handObj)
-
-        if length < 45 and delayCounter == 0:
-            handObj = checkPoints(props, pt1, pt2)
             if handObj:
-                delayCounter = 1
-                if handObj[-1] == "Space":
-                    textView += " "
-                elif handObj[-1] == "<":
-                    textView = textView[:-1]
-                else:
-                    textView += handObj[-1]
-        else:
-            delayCounter = 0 if delayCounter > 10 else delayCounter + 1
+                hoverBtn(img, handObj)
+
+            if length < 45 and delayCounter == 0:
+                handObj = checkPoints(props, pt1, pt2)
+                if handObj:
+                    delayCounter = 1
+                    if handObj[-1] == "Space":
+                        textView += " "
+                    elif handObj[-1] == "<":
+                        textView = textView[:-1]
+                    else:
+                        textView += handObj[-1]
+            else:
+                delayCounter = 0 if delayCounter > 10 else delayCounter + 1
         
     cv.putText(img, textView, (200, 100), cv.FONT_HERSHEY_PLAIN, 2, (0, 0, 255), 2)
 
@@ -98,3 +98,4 @@ while True:
     if cv.waitKey(1) & 0xFF == ord('q'):
         cv.destroyAllWindows()
         break
+
